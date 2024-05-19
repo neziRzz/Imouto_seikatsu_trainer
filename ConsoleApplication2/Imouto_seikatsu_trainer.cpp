@@ -92,16 +92,18 @@ int main(int argc, char** argv) {
             getchar();
         }
         else {
-            cout << "Welcome to the Abyss" << endl;
+            cout << "I alone am the honored one" << endl;
             cout << "Usage:F1(Max Trust),F2(Max Interest),F3(Max Lust),F4(Max Money)" << endl;
             uintptr_t BaseAddr = getBaseAddr(pID, L"GamePro.exe");
             uintptr_t dynamicPtrBaseAddImouto = BaseAddr + 0xDAD67C;
             vector<unsigned int> TrustOffsets = {0x0, 0x54};
             vector<unsigned int> InterestOffsets = { 0x0,0x58};
             vector<unsigned int> ImoutoLustOffsets = { 0x0,0x198 };
+            vector<unsigned int> MoneyOffsets = { 0x0,0x1C };
             uintptr_t TrustAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, TrustOffsets);
             uintptr_t InterestAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, InterestOffsets);
             uintptr_t ImoutoLustAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, ImoutoLustOffsets);
+            uintptr_t MoneyAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, MoneyOffsets);
             while (MaxTrust==FALSE) {
                 if (GetAsyncKeyState(VK_F1)) {
                     int InitTrust = 0;
@@ -131,6 +133,17 @@ int main(int argc, char** argv) {
                     int NewLust = 120;
                     WriteProcessMemory(procHandle, (BYTE*)ImoutoLustAddr, &NewLust, sizeof(NewLust), nullptr);
                     MaxLust = TRUE;
+                    cout << "Patch applied!" << endl;
+                    break;
+                }
+            }
+            while (MaxMoney == FALSE) {
+                if (GetAsyncKeyState(VK_F4)) {
+                    int InitMoney = 0;
+                    ReadProcessMemory(procHandle, (BYTE*)MoneyAddr, &InitMoney, sizeof(InitMoney), nullptr);
+                    int NewMoney = 999999;
+                    WriteProcessMemory(procHandle, (BYTE*)MoneyAddr, &NewMoney, sizeof(NewMoney), nullptr);
+                    MaxMoney = TRUE;
                     cout << "Patch applied!" << endl;
                     break;
                 }
