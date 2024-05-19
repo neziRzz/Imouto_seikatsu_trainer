@@ -98,8 +98,10 @@ int main(int argc, char** argv) {
             uintptr_t dynamicPtrBaseAddImouto = BaseAddr + 0xDAD67C;
             vector<unsigned int> TrustOffsets = {0x0, 0x54};
             vector<unsigned int> InterestOffsets = { 0x0,0x58};
+            vector<unsigned int> ImoutoLustOffsets = { 0x0,0x198 };
             uintptr_t TrustAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, TrustOffsets);
             uintptr_t InterestAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, InterestOffsets);
+            uintptr_t ImoutoLustAddr = FindDMAAddy(procHandle, dynamicPtrBaseAddImouto, ImoutoLustOffsets);
             while (MaxTrust==FALSE) {
                 if (GetAsyncKeyState(VK_F1)) {
                     int InitTrust = 0;
@@ -118,6 +120,17 @@ int main(int argc, char** argv) {
                     int NewInterest = 9999;
                     WriteProcessMemory(procHandle, (BYTE*)InterestAddr, &NewInterest, sizeof(NewInterest), nullptr);
                     MaxTrust = TRUE;
+                    cout << "Patch applied!" << endl;
+                    break;
+                }
+            }
+            while (MaxLust == FALSE) {
+                if (GetAsyncKeyState(VK_F3)) {
+                    int InitLust = 0;
+                    ReadProcessMemory(procHandle, (BYTE*)ImoutoLustAddr, &InitLust, sizeof(InitLust), nullptr);
+                    int NewLust = 120;
+                    WriteProcessMemory(procHandle, (BYTE*)ImoutoLustAddr, &NewLust, sizeof(NewLust), nullptr);
+                    MaxLust = TRUE;
                     cout << "Patch applied!" << endl;
                     break;
                 }
